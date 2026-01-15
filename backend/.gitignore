@@ -4,6 +4,7 @@ node_modules
 .env.*.local
 
 /src/generated/
+/generated/
 dist/
 
 *.log
