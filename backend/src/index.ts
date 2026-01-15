@@ -1,6 +1,9 @@
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
+import routes from './routes';
+import { errorHandler, notFound } from './middleware/errorHandler';
+import prisma from './utils/prisma';
 
 dotenv.config();
 
@@ -9,11 +12,39 @@ const PORT = process.env.PORT || 5000;
 
 app.use(cors());
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 app.get('/', (req, res) => {
-  res.send('API is running...');
+  res.json({ 
+    success: true,
+    message: 'API is running',
+    version: '1.0.0'
+  });
+});
+app.use('/api', routes);
+
+app.use(notFound);
+app.use(errorHandler);
+
+// Test database connection and start server
+const startServer = async () => {
+  try {
+    await prisma.$connect();
+    console.log('Database connected successfully');
+    
+    app.listen(PORT, () => {
+      console.log(`Server running on http://localhost:${PORT}`);
+    });
+  } catch (error) {
+    console.error('Database connection failed:', error);
+    process.exit(1);
+  }
+};
+
+process.on('SIGINT', async () => {
+  await prisma.$disconnect();
+  console.log('Database disconnected');
+  process.exit(0);
 });
 
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-});
+startServer();

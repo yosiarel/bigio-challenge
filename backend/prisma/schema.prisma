@@ -5,10 +5,51 @@
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 generator client {
-  provider = "prisma-client"
-  output   = "../src/generated/prisma"
+  provider = "prisma-client-js"
 }
 
 datasource db {
   provider = "postgresql"
+}
+
+enum Category {
+  FINANCIAL
+  TECHNOLOGY
+  HEALTH
+}
+
+enum Status {
+  DRAFT
+  PUBLISH
+}
+
+model Story {
+  id        String    @id @default(uuid())
+  title     String
+  author    String
+  synopsis  String    @db.Text
+  category  Category
+  coverUrl  String?
+  tags      String[]
+  status    Status    @default(DRAFT)
+  chapters  Chapter[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  @@index([title, author])
+  @@index([category, status])
+  @@map("stories")
+}
+
+model Chapter {
+  id        String   @id @default(uuid())
+  title     String
+  content   String   @db.Text
+  storyId   String
+  story     Story    @relation(fields: [storyId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([storyId])
+  @@map("chapters")
 }
