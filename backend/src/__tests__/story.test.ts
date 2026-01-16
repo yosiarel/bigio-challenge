@@ -1,7 +1,7 @@
 import request from 'supertest';
 import { createApp } from '../app';
 import { mockPrisma } from './setup';
-import { Category, Status } from '@prisma/client';
+import { Category, Status } from '../../generated/prisma';
 
 const app = createApp();
 

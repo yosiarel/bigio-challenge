@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import storyService from '../services/story.service';
-import { Category, Status } from '@prisma/client';
+import { Category, Status } from '../../generated/prisma';
 
 class StoryController {
   async createStory(req: Request, res: Response, next: NextFunction) {

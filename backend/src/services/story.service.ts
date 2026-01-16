@@ -1,5 +1,5 @@
 import prisma from '../utils/prisma';
-import { Prisma, Category, Status } from '@prisma/client';
+import { Prisma, Category, Status } from '../../generated/prisma';
 
 interface CreateStoryData {
   title: string;
