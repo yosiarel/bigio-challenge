@@ -10,7 +10,7 @@ import {
 
 const router = Router();
 
-// Story CRUD routes
+router.get('/stats/dashboard', storyController.getDashboardStats);
 router.post(
   '/',
   validateStoryCreate,
@@ -27,12 +27,23 @@ router.put(
 );
 router.delete('/:id', storyController.deleteStory);
 
-// Chapter routes (nested under story)
 router.post(
   '/:storyId/chapters',
   validateChapter,
   handleValidationErrors,
   chapterController.createChapter
+);
+
+router.get(
+  '/:storyId/chapters/:chapterId',
+  chapterController.getChapterById
+);
+
+router.put(
+  '/:storyId/chapters/:chapterId',
+  validateChapter,
+  handleValidationErrors,
+  chapterController.updateChapterByStory
 );
 
 export default router;

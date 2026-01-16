@@ -102,6 +102,20 @@ class StoryController {
       next(error);
     }
   }
+
+  async getDashboardStats(req: Request, res: Response, next: NextFunction) {
+    try {
+      const stats = await storyService.getDashboardStats();
+
+      res.status(200).json({
+        success: true,
+        message: 'Dashboard stats retrieved successfully',
+        data: stats,
+      });
+    } catch (error: any) {
+      next(error);
+    }
+  }
 }
 
 export default new StoryController();

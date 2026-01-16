@@ -1,35 +1,33 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import AppLayout from './layout/AppLayout';
+import Dashboard from './pages/Dashboard/Home';
+import StoryList from './pages/Dashboard/StoryList';
+import AddStory from './pages/Dashboard/AddStory';
+import AddChapter from './pages/Dashboard/AddChapter';
+import EditChapter from './pages/Dashboard/EditChapter';
+import StoryDetail from './pages/Dashboard/StoryDetail';
+import EditStory from './pages/Dashboard/EditStory';
+import ErrorBoundary from './components/common/ErrorBoundary';
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <ErrorBoundary>
+      <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<AppLayout />}>
+          <Route index element={<Navigate to="/dashboard" replace />} />
+          <Route path="dashboard" element={<Dashboard />} />
+          <Route path="stories" element={<StoryList />} />
+          <Route path="stories/add" element={<AddStory />} />
+          <Route path="stories/:storyId/add-chapter" element={<AddChapter />} />
+          <Route path="stories/:id" element={<StoryDetail />} />
+          <Route path="stories/:id/edit" element={<EditStory />} />
+          <Route path="stories/:storyId/chapters/:chapterId/edit" element={<EditChapter />} />
+        </Route>
+      </Routes>
+    </BrowserRouter>
+    </ErrorBoundary>
+  );
 }
 
-export default App
+export default App;

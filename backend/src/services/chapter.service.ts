@@ -12,6 +12,21 @@ interface UpdateChapterData {
 }
 
 class ChapterService {
+  async getChapterById(id: string) {
+    const chapter = await prisma.chapter.findUnique({
+      where: { id },
+      include: {
+        story: true,
+      },
+    });
+
+    if (!chapter) {
+      throw new Error('Chapter not found');
+    }
+
+    return chapter;
+  }
+
   async createChapter(data: CreateChapterData) {
     const story = await prisma.story.findUnique({
       where: { id: data.storyId },

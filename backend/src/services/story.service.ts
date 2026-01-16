@@ -133,6 +133,22 @@ class StoryService {
       where: { id },
     });
   }
+
+  async getDashboardStats() {
+    const [totalStories, publishedStories, draftStories, totalChapters] = await prisma.$transaction([
+      prisma.story.count(),
+      prisma.story.count({ where: { status: 'PUBLISH' } }),
+      prisma.story.count({ where: { status: 'DRAFT' } }),
+      prisma.chapter.count(),
+    ]);
+
+    return {
+      total: totalStories,
+      published: publishedStories,
+      draft: draftStories,
+      totalChapters,
+    };
+  }
 }
 
 export default new StoryService();

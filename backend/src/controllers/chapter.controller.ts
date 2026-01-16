@@ -2,6 +2,27 @@ import { Request, Response, NextFunction } from 'express';
 import chapterService from '../services/chapter.service';
 
 class ChapterController {
+  async getChapterById(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { chapterId } = req.params;
+      const chapter = await chapterService.getChapterById(chapterId as string);
+
+      res.status(200).json({
+        success: true,
+        message: 'Chapter retrieved successfully',
+        data: chapter,
+      });
+    } catch (error: any) {
+      if (error.message === 'Chapter not found') {
+        return res.status(404).json({
+          success: false,
+          message: error.message,
+        });
+      }
+      next(error);
+    }
+  }
+
   async createChapter(req: Request, res: Response, next: NextFunction) {
     try {
       const { storyId } = req.params;
@@ -32,6 +53,27 @@ class ChapterController {
     try {
       const { id } = req.params;
       const chapter = await chapterService.updateChapter(id as string, req.body);
+
+      res.status(200).json({
+        success: true,
+        message: 'Chapter updated successfully',
+        data: chapter,
+      });
+    } catch (error: any) {
+      if (error.message === 'Chapter not found') {
+        return res.status(404).json({
+          success: false,
+          message: error.message,
+        });
+      }
+      next(error);
+    }
+  }
+
+  async updateChapterByStory(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { chapterId } = req.params;
+      const chapter = await chapterService.updateChapter(chapterId as string, req.body);
 
       res.status(200).json({
         success: true,

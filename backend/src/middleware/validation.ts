@@ -8,7 +8,15 @@ export const validateStoryCreate = [
   body('category')
     .isIn(['FINANCIAL', 'TECHNOLOGY', 'HEALTH'])
     .withMessage('Category must be FINANCIAL, TECHNOLOGY, or HEALTH'),
-  body('coverUrl').optional().isURL().withMessage('Cover URL must be a valid URL'),
+  body('coverUrl')
+    .optional({ nullable: true, checkFalsy: true })
+    .custom((value) => {
+      if (!value) return true;
+
+      const urlPattern = /^(https?:\/\/)?(localhost|127\.0\.0\.1|[\w-]+(\.[\w-]+)+)(:\d+)?(\/.*)?$/;
+      if (urlPattern.test(value)) return true;
+      throw new Error('Cover URL must be a valid URL');
+    }),
   body('tags').isArray().withMessage('Tags must be an array'),
   body('tags.*').trim().notEmpty().withMessage('Each tag must not be empty'),
   body('status')
@@ -24,7 +32,14 @@ export const validateStoryUpdate = [
     .optional()
     .isIn(['FINANCIAL', 'TECHNOLOGY', 'HEALTH'])
     .withMessage('Category must be FINANCIAL, TECHNOLOGY, or HEALTH'),
-  body('coverUrl').optional().isURL().withMessage('Cover URL must be a valid URL'),
+  body('coverUrl')
+    .optional({ nullable: true, checkFalsy: true })
+    .custom((value) => {
+      if (!value) return true;
+      const urlPattern = /^(https?:\/\/)?(localhost|127\.0\.0\.1|[\w-]+(\.[\w-]+)+)(:\d+)?(\/.*)?$/;
+      if (urlPattern.test(value)) return true;
+      throw new Error('Cover URL must be a valid URL');
+    }),
   body('tags').optional().isArray().withMessage('Tags must be an array'),
   body('tags.*').optional().trim().notEmpty().withMessage('Each tag must not be empty'),
   body('status')
