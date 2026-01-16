@@ -74,4 +74,5 @@ A full-stack web application for managing stories and chapters. This system allo
 * `prisma` - Database schema and migrations
 
 ## <a name="website-url"></a> Website URL :
-Attach the link of your deployed project or youtube link here
+Frontend: https://bigio-challenge.vercel.app/
+Backend: https://bigio-challenge-production.up.railway.app
